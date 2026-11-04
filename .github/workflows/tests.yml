@@ -1,0 +1,90 @@
+name: Tests
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Poetry
+        run: pip install poetry 
+
+      - name: Config Poetry
+        run: poetry  config virtualenvs.in-project true
+
+      - name: Install dependencies
+        run: poetry install --with dev --no-interaction
+
+
+      - name: Create .env
+        run: |
+          cat << 'EOF' > .env
+          DATABASE_CONNECT=sqlite+aiosqlite:///test.db
+          REDIS_HOST=localhost
+          REDIS_PORT=6379
+          ACCESS_TOKEN_EXPIRE_MINUTES=20
+          ALGORITHM_TOKEN=HS256
+          REFRESH_TOKEN_EXPIRE_DAYS=1
+          SECRET_KEY_TOKEN=cli-only-access-key-not-for-production=123
+          SECRET_KEY_TOKEN_REFRESH=cli-key-only-fefresh-key-not-for-production=123
+          EOF
+
+      - name: Check .env file
+        run: |
+          if [ -f .env ]; then
+            echo ".env file exists"
+            sed 's/=.*/=REDACTED/' .env
+          else
+            echo ".env file not found!"
+            exit 1
+          fi
+
+      - name: Create .env.test for tests
+        run: |
+          cat << 'EOF' > .env.test
+          TEST_SQLITE_URL=sqlite+aiosqlite:///test.db
+          EOF
+
+      - name: Check .env.test file
+        run: |
+          if [ -f .env.test ]; then
+            echo ".env.test file exists"
+            sed 's/=.*/=REDACTED/' .env.test
+          else
+            echo ".env.test file not found!"
+            exit 1
+          fi
+
+      - name: Install Redis Server
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y redis-server
+          sudo systemctl start redis-server
+
+      - name: Check Redis status
+        run: redis-cli ping
+
+
+      - name: Pytest
+        run: poetry run pytest tests
+
+
+        
+
+
