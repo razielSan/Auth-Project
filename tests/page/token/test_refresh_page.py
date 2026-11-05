@@ -342,5 +342,5 @@ async def test_refresh_without_refresh_token_flow(
         assert RefreshTokenMissingError.message in caplog.text
         assert RefreshTokenMissingError.code in caplog.text
 
-    assert '<form id="login-form">' in response_jwt.text
+    assert '<form id="login-form" method="POST">' in response_jwt.text
     assert response_jwt.url.path == PageUrl.MAIN_PAGE
