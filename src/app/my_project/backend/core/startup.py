@@ -9,9 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.exc import ArgumentError, OperationalError
 
 from app.my_project.backend.core.routers import inculde_routers
-from app.my_project.backend.core.middleware import (
-    SecurityMiddleware,
-)
+from app.my_project.backend.core.middleware import SecurityMiddleware, add_middlewares
 from app.my_project.backend.settings.paths import STATIC_DIR
 from app.my_project.backend.presentation.url import PageUrl, ALLOWED_REDIRECT_URLS
 from app.my_project.backend.presentation.constants import TRUSTED_PROXIES
@@ -31,7 +29,7 @@ from settings.config import settings
 
 
 def create_up() -> FastAPI:
-    # validate_database_name_and_driver(url=settings.DATABASE_CONNECT)
+    validate_database_name_and_driver(url=settings.DATABASE_CONNECT)
 
     setup_loggers()
     logger = logging.getLogger(name=__name__)
@@ -55,7 +53,9 @@ def create_up() -> FastAPI:
                 path=PageUrl.MAIN_PAGE,
             )
             jwt_security = PyJWTSecurity(
-                access_token_lifetime=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
+                access_token_lifetime=timedelta(
+                    minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+                ),
                 refresh_token_lifetime=timedelta(
                     days=settings.REFRESH_TOKEN_EXPIRE_DAYS,
                 ),
@@ -104,6 +104,7 @@ def create_up() -> FastAPI:
     app.mount(path="/static", app=StaticFiles(directory=STATIC_DIR), name="static")
     logger.info("Static connected")
 
+    add_middlewares(app=app, logger=logger)
     app.add_middleware(SecurityMiddleware)
     logger.info("Middleware connected")
 
