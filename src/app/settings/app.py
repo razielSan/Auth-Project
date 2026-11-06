@@ -5,7 +5,7 @@ class Settings:
     APP: str = "app.main:app"
     HOST: str = BaseAppURL.HOST
     PORT: int = BaseAppURL.PORT
-    RELOAD: bool = True
+    RELOAD: bool = False
 
 
 settings = Settings()
