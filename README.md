@@ -107,9 +107,27 @@ cd <repository-directory>
 
 ### 2️⃣ Install dependencies
 
+First. install Poetry
+
 ```bash
 pip install poetry
 poetry install
+```
+
+**For development**
+
+Install all dependencies, including development tools(pytest, mypy, ruff, etc.)
+
+```bash
+poetry install
+```
+
+**For production**
+
+Install only the main dependencies required to run, the application
+
+```bash
+poetry install --without dev
 ```
 
 
