@@ -43,6 +43,12 @@ jobs:
           REFRESH_TOKEN_EXPIRE_DAYS=1
           SECRET_KEY_TOKEN=cli-only-access-key-not-for-production=123
           SECRET_KEY_TOKEN_REFRESH=cli-key-only-fefresh-key-not-for-production=123
+          HTTPONLY=True
+          SAMESITE=lax
+          SECURE=True
+          DB_POOL_SIZE=5
+          DB_MAX_OVERFLOW=10
+          DB_ECHO=False
           EOF
 
       - name: Check .env file
