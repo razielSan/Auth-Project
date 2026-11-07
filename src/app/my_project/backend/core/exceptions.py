@@ -42,7 +42,7 @@ def include_exceptions(app: FastAPI, logger: Logger) -> None:
             content=error.content,
         )
 
-    logger.info(f"Обработчик ошибок {RequestValidationError.__name__} подключен")
+    logger.info(f"The error handler is enabled - {RequestValidationError.__name__}")
 
     @app.exception_handler(AppException)
     async def get_application_exceptions(
@@ -89,7 +89,7 @@ def include_exceptions(app: FastAPI, logger: Logger) -> None:
             status_code=error.status_code,
         )
 
-    logger.info(f"Обработчик ошибок {AppException.__name__} подключен")
+    logger.info(f"The error handler is enabled - {AppException.__name__}")
 
     @app.exception_handler(Exception)
     async def get_exception(request: Request, exc: Exception) -> Response:
@@ -114,7 +114,7 @@ def include_exceptions(app: FastAPI, logger: Logger) -> None:
             status_code=error.status_code,
         )
 
-    logger.info("Обработчик ошибок Exception подключен")
+    logger.info(f"The error handler is enabled - {Exception.__name__}")
 
     @app.exception_handler(404)
     async def handler_not_found(
@@ -142,4 +142,4 @@ def include_exceptions(app: FastAPI, logger: Logger) -> None:
             status_code=not_found_exception.status_code,
         )
 
-    logger.info("Обработчик ошибки 404 подключен")
+    logger.info("The error handler is enabled - 404")
