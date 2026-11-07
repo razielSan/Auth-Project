@@ -6,7 +6,11 @@ def get_the_last_file_from_path(path: str) -> str:
     return path.replace("\\", "/").split("/")[-1]
 
 
-FORBIDDEN_FILES = (".env", ".env.test")
+FORBIDDEN_FILES = (
+    ".env",
+    ".env.test",
+    ".env.proxy",
+)
 
 
 def main() -> int:
