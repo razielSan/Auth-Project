@@ -10,8 +10,8 @@ class Settings(BaseSettings):
     DATABASE_CONNECT: str
 
     # SQLAlchemy settings
-    DB_POOL_SIZE: int = Field(default=5, gt=1)
-    DB_MAX_OVERFLOW: int = Field(default=10, gt=0)
+    DB_POOL_SIZE: int = Field(default=5, ge=1)
+    DB_MAX_OVERFLOW: int = Field(default=10, ge=0)
     DB_ECHO: bool
 
     # Redis settings
