@@ -13,14 +13,17 @@ class SessionFactorySQLAlchemy(SessionFactoryProtocol[AsyncSession]):
     def __init__(
         self,
         database: str,
+        pool_size: int = 5,
+        max_overflow: int = 10,
+        echo: bool = False
     ) -> None:
         self.database = database
 
         self.engine = create_async_engine(
             url=database,
-            pool_size=5,
-            echo=False,
-            max_overflow=10,
+            pool_size=pool_size,
+            echo=echo,
+            max_overflow=max_overflow,
         )
 
         self.session = async_sessionmaker(

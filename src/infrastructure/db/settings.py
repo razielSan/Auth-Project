@@ -5,6 +5,7 @@ from domain.db.constants import names_tables, roles, Role
 from infrastructure.db.sqlalchemy.session import SessionFactorySQLAlchemy
 from infrastructure.db.sqlalchemy.uow import SQLAlchemyUnitOfWork
 from infrastructure.db.utils import check_tables_sqlaclhemy_exists
+from settings.config import settings
 
 
 class DatabaseConfig:
@@ -16,6 +17,9 @@ class DatabaseConfig:
         self._logger = logger
         self._session_factory = SessionFactorySQLAlchemy(
             database=database_url,
+            pool_size=settings.DB_POOL_SIZE,
+            max_overflow=settings.DB_MAX_OVERFLOW,
+            echo=settings.DB_ECHO,
         )
 
     @property
