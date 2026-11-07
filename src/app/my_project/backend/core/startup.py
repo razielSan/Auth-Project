@@ -26,6 +26,7 @@ from infrastructure.security.token import PyJWTSecurity
 from infrastructure.db.redis.rate_limit import RateLimitRedisClient
 from infrastructure.security.url import ALLOWED_ORIGINS
 from settings.config import settings
+from settings.cookie import cookie_settings
 
 
 def create_up() -> FastAPI:
@@ -47,9 +48,9 @@ def create_up() -> FastAPI:
             logger.info("The admin has been successfully initialized")
 
             cookie_api = CookieApi(
-                httponly=True,
-                samesite="lax",
-                secure=False,
+                httponly=cookie_settings.HTTPONLY,
+                samesite=cookie_settings.SAMESITE,
+                secure=cookie_settings.SECURE,
                 path=PageUrl.MAIN_PAGE,
             )
             jwt_security = PyJWTSecurity(
